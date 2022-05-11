@@ -88,6 +88,7 @@ namespace ControlEmpleados.ViewModels
             Error = "";
             Modo = "Editar";
             Notificar("");
+            Cancelar();
         }
 
         private void Eliminar()
@@ -119,7 +120,10 @@ namespace ControlEmpleados.ViewModels
 
                     context.SaveChanges();
                     Notificar("");
+                    Cancelar();
                 }
+
+                
             }
         }
 

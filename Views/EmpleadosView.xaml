@@ -9,13 +9,13 @@
              d:DesignHeight="450" d:DesignWidth="800" Background="White" 
              x:Name="ventanaEmpleados">
 
+    <UserControl.DataContext>
+        <vm:EmpleadosViewModel></vm:EmpleadosViewModel>
+    </UserControl.DataContext>
 
     <UserControl.Resources>
-        <vm:EmpleadosViewModel x:Key="evm"></vm:EmpleadosViewModel>
         <DockPanel x:Key="Agregar">
-            <DockPanel.DataContext>
-                <vm:EmpleadosViewModel></vm:EmpleadosViewModel>
-            </DockPanel.DataContext>
+            
             <Border Padding="10"
                     DockPanel.Dock="Top"
                     BorderThickness="0,0,0,2" BorderBrush="Gray">
@@ -25,52 +25,45 @@
                    HorizontalAlignment="Center" DockPanel.Dock="Top"></TextBlock>
             <StackPanel Margin="5">
                 <TextBlock  FontSize="15">Nombre:</TextBlock>
-                <TextBox  Height="20" Text="{}" FontSize="15" ></TextBox>
+                <TextBox  Height="20" Text="{Binding Empleado.Nombre}" FontSize="15" ></TextBox>
                 <TextBlock  FontSize="15">Sueldo:</TextBlock>
-                <TextBox   Height="20" FontSize="15" ></TextBox>
+                <TextBox   Height="20" FontSize="15" Text="{Binding Empleado.Sueldo}"></TextBox>
                 <TextBlock  FontSize="15">Categoria:</TextBlock>
-                <ComboBox ItemsSource="{Binding}"
-                          DisplayMemberPath="" 
-                          SelectedValuePath=""
-                          SelectedValue="{}" ></ComboBox>
+                <ComboBox ItemsSource="{Binding Categorias}"
+                          DisplayMemberPath="Nombre" 
+                          SelectedValuePath="Id"
+                          SelectedValue="{Binding Empleado.IdCategoria}" ></ComboBox>
                 <WrapPanel Margin="5,10" >
-                    <Button  Command="{ Binding}" >Guardar</Button>
-                    <Button Margin="10,0,0,0" Command="{}" >Cancelar</Button>
+                    <Button  Command="{Binding GuardarCommand}" >Guardar</Button>
+                    <Button Margin="10,0,0,0" Command="{Binding CancelarCommand}" >Cancelar</Button>
                 </WrapPanel>
             </StackPanel>
         </DockPanel>
         <DockPanel x:Key="Editar">
-            <DockPanel.DataContext>
-                <vm:EmpleadosViewModel></vm:EmpleadosViewModel>
-            </DockPanel.DataContext>
             <Border Padding="10"
                     DockPanel.Dock="Top"
                     BorderThickness="0,0,0,2" BorderBrush="Gray">
                 <TextBlock FontSize="20" >Editar Empleados</TextBlock>
             </Border>
-            <TextBlock Margin="10" Foreground="Red" FontSize="10" Text="{}" 
+            <TextBlock Margin="10" Foreground="Red" FontSize="10" Text="{Binding Error}" 
                    HorizontalAlignment="Center" DockPanel.Dock="Top"></TextBlock>
             <StackPanel Margin="5">
                 <TextBlock  FontSize="15">Nombre:</TextBlock>
-                <TextBox  Height="20" Text="{}" FontSize="15" ></TextBox>
+                <TextBox  Height="20" Text="{Binding Empleado.Nombre}" FontSize="15" ></TextBox>
                 <TextBlock  FontSize="15">Sueldo:</TextBlock>
-                <TextBox   Height="20" Text="{}" FontSize="15" ></TextBox>
+                <TextBox   Height="20" Text="{Binding Empleado.Sueldo}" FontSize="15" ></TextBox>
                 <TextBlock  FontSize="15">Categoria:</TextBlock>
-                <ComboBox ItemsSource="{Binding }"
-                          DisplayMemberPath="" 
-                          SelectedValuePath=""
-                          SelectedValue="{}" ></ComboBox>
+                <ComboBox ItemsSource="{Binding Categorias}"
+                          DisplayMemberPath="Nombre" 
+                          SelectedValuePath="Id"
+                          SelectedValue="{Binding Empleado.Id}" ></ComboBox>
                 <WrapPanel Margin="5,10" >
-                    <Button  Command="{}" >Guardar</Button>
-                    <Button Margin="10,0,0,0" Command="{}" >Cancelar</Button>
+                    <Button  Command="{Binding GuardarCommand}" >Guardar</Button>
+                    <Button Margin="10,0,0,0" Command="{Binding CancelarCommand}" >Cancelar</Button>
                 </WrapPanel>
             </StackPanel>
         </DockPanel>
         <DockPanel x:Key="Ver">
-            <DockPanel.DataContext>
-                <vm:EmpleadosViewModel></vm:EmpleadosViewModel>
-            </DockPanel.DataContext>
-
             <Border Padding="10"
                     DockPanel.Dock="Top"
                     BorderThickness="0,0,0,2" BorderBrush="Gray">
@@ -95,6 +88,7 @@
                       ItemsSource="{Binding Empleados}"
                       Margin="20"
                       GridLinesVisibility="None"
+                      SelectedItem="{Binding Empleado}"
                       >
                 <DataGrid.Columns>
                     <DataGridTextColumn FontSize="20" 
@@ -102,7 +96,6 @@
                                         Header="Nombre"
                                         Width=".4*"
                                         >
-
                     </DataGridTextColumn>
                     <DataGridTextColumn FontSize="20" 
                                         Binding="{Binding Sueldo}"                                        
@@ -122,8 +115,9 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock FontSize="20">
-                                    <Hyperlink Command="{}"
-                                               CommandParameter="{}"
+                                    <Hyperlink Command="{Binding ElementName=ventanaEmpleados ,
+                                        Path= DataContext.EditarCommand}"
+                                               CommandParameter="{Binding .}"
                                                Foreground="Black">Editar
                                     </Hyperlink>
                                 </TextBlock>
@@ -136,8 +130,8 @@
                             <DataTemplate>
                                 <TextBlock FontSize="20">
                                     <Hyperlink 
-                                       
-                                               CommandParameter="{}" 
+                                               Click="Hyperlink_Click"
+                                               CommandParameter="{Binding .}" 
                                                Foreground="Black">Eliminar
                                     </Hyperlink>
                                 </TextBlock>
