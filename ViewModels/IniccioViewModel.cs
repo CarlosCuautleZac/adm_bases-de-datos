@@ -75,7 +75,7 @@ namespace ControlEmpleados.ViewModels
         private void AdministrarSecciones()
         {
             seccionesview = new() { DataContext = this };
-            Vista = empleadosview;
+            Vista = seccionesview;
             Actualizar();
         }
 

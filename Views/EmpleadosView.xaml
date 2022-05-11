@@ -8,10 +8,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="White" 
              x:Name="ventanaEmpleados">
+
+
     <UserControl.Resources>
-        
-        
+        <vm:EmpleadosViewModel x:Key="evm"></vm:EmpleadosViewModel>
         <DockPanel x:Key="Agregar">
+            <DockPanel.DataContext>
+                <vm:EmpleadosViewModel></vm:EmpleadosViewModel>
+            </DockPanel.DataContext>
             <Border Padding="10"
                     DockPanel.Dock="Top"
                     BorderThickness="0,0,0,2" BorderBrush="Gray">
@@ -36,6 +40,9 @@
             </StackPanel>
         </DockPanel>
         <DockPanel x:Key="Editar">
+            <DockPanel.DataContext>
+                <vm:EmpleadosViewModel></vm:EmpleadosViewModel>
+            </DockPanel.DataContext>
             <Border Padding="10"
                     DockPanel.Dock="Top"
                     BorderThickness="0,0,0,2" BorderBrush="Gray">
@@ -60,18 +67,22 @@
             </StackPanel>
         </DockPanel>
         <DockPanel x:Key="Ver">
+            <DockPanel.DataContext>
+                <vm:EmpleadosViewModel></vm:EmpleadosViewModel>
+            </DockPanel.DataContext>
+
             <Border Padding="10"
                     DockPanel.Dock="Top"
                     BorderThickness="0,0,0,2" BorderBrush="Gray">
                 <DockPanel>
                     <Button DockPanel.Dock="Right"
                             Padding="10,5"
-                           Command="{Binding }" >Agregar</Button>
+                           Command="{Binding AgregarCommand}" >Agregar</Button>
                     <TextBlock FontSize="20" >Lista de Empleados</TextBlock>
                 </DockPanel>
 
             </Border>
-            <TextBlock Margin="10" Foreground="Red" FontSize="10" Text="{}" 
+            <TextBlock Margin="10" Foreground="Red" FontSize="10" Text="{Binding Error}" 
                    HorizontalAlignment="Center" DockPanel.Dock="Top"></TextBlock>
             <DataGrid SelectionMode="Single" 
                       SelectionUnit="FullRow"
@@ -87,21 +98,21 @@
                       >
                 <DataGrid.Columns>
                     <DataGridTextColumn FontSize="20" 
-                                        Binding="{Binding }"
+                                        Binding="{Binding Nombre}"
                                         Header="Nombre"
                                         Width=".4*"
                                         >
 
                     </DataGridTextColumn>
                     <DataGridTextColumn FontSize="20" 
-                                        Binding="{Binding}"                                        
+                                        Binding="{Binding Sueldo}"                                        
                                         Header="Sueldo"
                                         Width=".2*"
                                         >
 
                     </DataGridTextColumn>
                     <DataGridTextColumn FontSize="20" 
-                                        Binding="{Binding}"
+                                        Binding="{Binding IdCategoriaNavigation.Nombre}"
                                         Header="Categoría"
                                         Width=".4*"
                                         >
@@ -139,22 +150,20 @@
         </DockPanel>
     </UserControl.Resources>
 
-    <ContentControl >
-        
-        
+    <ContentControl>
         <ContentControl.Style>
-            <Style TargetType="ContentControl">
-                <Setter Property="Content" Value="{StaticResource Ver}"></Setter>
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding Modo}" Value="Agregar">
-                        <Setter Property="Content" Value="{StaticResource Agregar}"></Setter>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Modo}" Value="Editar">
-                        <Setter Property="Content" Value="{StaticResource Editar}"></Setter>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </ContentControl.Style>
-    </ContentControl>
+                <Style TargetType="ContentControl">
+                    <Setter Property="Content" Value="{StaticResource Ver}"></Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Modo}" Value="Agregar">
+                            <Setter Property="Content" Value="{StaticResource Agregar}"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Modo}" Value="Editar">
+                            <Setter Property="Content" Value="{StaticResource Editar}"></Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
 
 </UserControl>

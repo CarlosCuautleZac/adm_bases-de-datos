@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace ControlEmpleados.ViewModels
 {
-    class EmpleadosViewModel : INotifyPropertyChanged
+    public class EmpleadosViewModel : INotifyPropertyChanged
     {
         NominaContext context = new();
 
@@ -74,10 +74,27 @@ namespace ControlEmpleados.ViewModels
             Notificar("");
         }
 
+        private void Cancelar()
+        {
+            if (Empleado != null)
+                context.Entry(Empleado).Reload();
+            Modo = "Ver";
+            Error = "";
+            Notificar("");
+        }
+
+        private void Editar()
+        {
+            Error = "";
+            Modo = "Editar";
+            Notificar("");
+        }
+
         private void Eliminar()
         {
             Error = "";
             context.Empleados.Remove(context.Empleados.FirstOrDefault(x => x.Id == Empleado.Id));
+            Notificar("");
             context.SaveChanges();
         }
 
