@@ -67,14 +67,14 @@ namespace ControlEmpleados.ViewModels
 
         private void AdministrarEmpleados()
         {
-            empleadosview = new() { DataContext = this };
+            empleadosview = new();
             Vista = empleadosview;
             Actualizar();
         }
 
         private void AdministrarSecciones()
         {
-            seccionesview = new() { DataContext = this };
+            seccionesview = new();
             Vista = seccionesview;
             Actualizar();
         }

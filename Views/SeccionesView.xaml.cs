@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ControlEmpleados.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,16 @@ namespace ControlEmpleados.Views
         public SeccionesView()
         {
             InitializeComponent();
+        }
+
+        private void Hyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("¿Eliminar", "Categoria a eliminar", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                var vm = (SeccionesViewModel)this.DataContext;
+                var commandparameter = ((Hyperlink)sender).CommandParameter;
+                vm.EliminarCommand.Execute(null);
+            }
         }
     }
 }

@@ -28,7 +28,7 @@ namespace ControlEmpleados.Views
 
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
         {
-             if(MessageBox.Show("¿Eliminar", "Empleado a eliminar", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (MessageBox.Show("¿Eliminar", "Empleado a eliminar", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 var vm = (EmpleadosViewModel)this.DataContext;
                 var commandparameter = ((Hyperlink)sender).CommandParameter;

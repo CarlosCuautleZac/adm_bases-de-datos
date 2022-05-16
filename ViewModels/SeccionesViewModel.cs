@@ -16,6 +16,10 @@ namespace ControlEmpleados.ViewModels
         NominaContext context = new();
 
         public ICommand VerAgregarCommand { get; set; }
+        public ICommand GuardarCommad { get; set; }
+        public ICommand CancelarCommand { get; set; }
+        public ICommand VerEditarCommand { get; set; }
+        public ICommand EliminarCommand { get; set; }
 
         private string error;
 
@@ -41,11 +45,26 @@ namespace ControlEmpleados.ViewModels
             set { categoria = value; Actualizar(); }
         }
 
+
+        private string modo;
+
+        public string Modo
+        {
+            get { return modo; }
+            set { modo = value; Actualizar("Modo"); }
+        }
+
+
         //Constructor
         public SeccionesViewModel()
         {
+            Modo = "Ver";
+            Actualizar("Modo");
             VerAgregarCommand = new RelayCommand(VerAgregar);
-
+            VerEditarCommand = new RelayCommand(VerEditar);
+            GuardarCommad = new RelayCommand(Guardar);
+            CancelarCommand = new RelayCommand(Cancelar);
+            EliminarCommand = new RelayCommand(Eliminar);
             Categorias = new ObservableCollection<Categorium>(context.Categoria.OrderBy(x=>x.Nombre));
         }
 
@@ -55,16 +74,87 @@ namespace ControlEmpleados.ViewModels
 
         private void VerAgregar()
         {
-            throw new NotImplementedException();
+            Error = "";
+            Categoria = new();
+            Modo = "Agregar";
+            Actualizar("Modo");
+        }
+
+        private void Guardar()
+        {
+            if (Categoria != null)
+            {
+                Error = "";
+
+                if (string.IsNullOrWhiteSpace(Categoria.Nombre))
+                    Error += "Escriba el nombre del emplado" + Environment.NewLine;
+                if (Categoria.SueldoMaximo < 100)
+                    Error += "El sueldo debe ser mayor a $100 como minimo"+Environment.NewLine;
+
+                Actualizar("Error");
+
+                if (Error == "")
+                {
+                    if (Categoria.Id == 0)
+                        context.Add(Categoria);
+                    else
+                        context.Update(Categoria);
+
+                    context.SaveChanges();
+                    Actualizar("");
+                    ActualizarListaCategorias();
+                    Cancelar();
+                }
+
+
+            }
         }
 
         //READ 
 
+        private void ActualizarListaCategorias()
+        {
+            Categorias = new(context.Categoria.OrderBy(x => x.Nombre));
+            Actualizar();
+        }
+
         //UPDATE
+
+        private void VerEditar()
+        {
+            Modo = "Editar";
+            Error = "";
+            Actualizar("Modo");
+        }
+
 
         //DELETE
 
+        private void Eliminar()
+        {
+            Error="";
+            if (Categoria.TotalEmpleados < 0)
+            {
+                context.Remove(Categoria);
+                context.SaveChanges();
+                ActualizarListaCategorias();
+            }
+            else
+                Error = "No se puede eliminar una categoria que contenga empleados" + Environment.NewLine;
+            
+        }
 
+        //Comando para cancelar
+        
+        private void Cancelar()
+        {
+            if (categoria != null)
+                context.Entry(Categoria).Reload();
+            Error = "";
+            Modo = "Ver";
+            Actualizar();
+
+        }
 
         private void Actualizar(string nombre=null)
         {

@@ -45,7 +45,7 @@ namespace ControlEmpleados.ViewModels
 
         //Propiedad para manejar lo que hay dentro del usercontrol
 
-        public string Modo { get; set; } = "Ver";
+        public string Modo { get; set; }
 
         //Propiedad para tener una coleccion de secciones 
         public List<Categorium> Categorias { get; set; } = new();
@@ -63,6 +63,7 @@ namespace ControlEmpleados.ViewModels
         //Constructor
         public EmpleadosViewModel()
         {
+            Modo = "Ver";
             AgregarCommand = new RelayCommand(Agregar);
             EliminarCommand = new RelayCommand(Eliminar);
             EditarCommand = new RelayCommand(Editar);
@@ -80,23 +81,25 @@ namespace ControlEmpleados.ViewModels
                 context.Entry(Empleado).Reload();
             Modo = "Ver";
             Error = "";
-            Notificar("");
+            Notificar("Modo");
         }
 
         private void Editar()
         {
             Error = "";
             Modo = "Editar";
-            Notificar("");
-            Cancelar();
+            Notificar("Modo");
+            
         }
 
         private void Eliminar()
         {
             Error = "";
             context.Empleados.Remove(context.Empleados.FirstOrDefault(x => x.Id == Empleado.Id));
-            Notificar("");
             context.SaveChanges();
+            Notificar("Empleados");
+            ActualizarListaEmpleados();
+            
         }
 
         private void Guardar()
@@ -104,13 +107,14 @@ namespace ControlEmpleados.ViewModels
             if(Empleado != null)
             {
                 Error = "";
+
                 if (string.IsNullOrWhiteSpace(Empleado.Nombre))
                     Error += "Escriba el nombre del emplado" + Environment.NewLine;
                 if (Empleado.Sueldo <= 0)
                     Error += "El sueldo del empleado debe ser mayor a $0.00" + Environment.NewLine;
 
                 Notificar("Error");
-
+                
                 if(Error == "")
                 {
                     if (Empleado.Id == 0)
@@ -120,6 +124,7 @@ namespace ControlEmpleados.ViewModels
 
                     context.SaveChanges();
                     Notificar("");
+                    ActualizarListaEmpleados();
                     Cancelar();
                 }
 
@@ -132,7 +137,7 @@ namespace ControlEmpleados.ViewModels
             Empleado = new();
             Error = "";
             Modo = "Agregar";
-            Notificar("");
+            Notificar("Modo");
         }
 
         //Aqui actualizamos empleados
