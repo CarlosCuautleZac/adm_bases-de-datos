@@ -133,7 +133,7 @@ namespace ControlEmpleados.ViewModels
         private void Eliminar()
         {
             Error="";
-            if (Categoria.TotalEmpleados < 0)
+            if (Categoria.TotalEmpleados < 1)
             {
                 context.Remove(Categoria);
                 context.SaveChanges();
